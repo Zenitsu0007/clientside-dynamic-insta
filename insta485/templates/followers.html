@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>insta485</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='/css/followers_style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Navigation Links -->
+    <header>
+      <nav>
+        <a href="/">insta485</a>
+        <div class="navbar-right">
+          <a href="/explore/">Explore</a>
+          <a href="/users/{{ logname }}/">{{ logname }}</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Followers -->
+    <div class="followers-title">
+      <p>Followers</p>
+    </div>
+
+    {% for follower in followers %}
+    <div class="follower">
+      <div class="follower-info">
+        <img
+          src="{{ url_for('uploaded_file', filename=follower.user_img_url) }}"
+          alt="Profile Picture"
+        />
+        <a href="/users/{{ follower.username }}/">{{ follower.username }}</a>
+      </div>
+      <div class="follow-status">
+        {% if logname != follower.username %} {% if
+        follower.logname_follows_username %}
+        <p>following</p>
+        <!-- Unfollow Form -->
+        <form
+          action="/following/?target=/users/{{ username }}/followers/"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="submit" name="unfollow" value="unfollow" />
+          <input
+            type="hidden"
+            name="username"
+            value="{{ follower.username }}"
+          />
+          <input type="hidden" name="operation" value="unfollow" />
+        </form>
+        {% else %}
+        <p>not following</p>
+        <!-- Follow Form -->
+        <form
+          action="/following/?target=/users/{{ username }}/followers/"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="submit" name="follow" value="follow" />
+          <input
+            type="hidden"
+            name="username"
+            value="{{ follower.username }}"
+          />
+          <input type="hidden" name="operation" value="follow" />
+        </form>
+        {% endif %} {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </body>
+</html>

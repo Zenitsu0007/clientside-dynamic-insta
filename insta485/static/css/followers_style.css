@@ -1,0 +1,104 @@
+body,
+h1,
+h2,
+h3,
+p,
+a {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica', sans-serif;
+}
+
+body {
+    width: 40%;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 40px;
+}
+
+header nav a {
+    color: #262626;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.navbar-right a {
+    color: #003569;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0 10px;
+}
+
+.followers-title {
+    display: flex;
+    align-items: left;
+    font-size: 36px;
+    font-weight: bold;
+    padding: 30px 20px;
+}
+
+.follower {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #bfbebe;
+    border-radius: 10px;
+    margin: 20px 20px;
+}
+
+.follower-info {
+    display: flex;
+    align-items: center;
+}
+
+.follower-info a {
+    color: #262626;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.follower-info img {
+    width: 50px;
+    height: 50px;
+    object-fit: fill;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.follow-status {
+    display: flex;
+    color: #525252;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.follow-status form {
+    margin-left: 10px;
+}
+
+.follow-status input[type="submit"] {
+    display: flex;
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    padding: 6px 10px;
+    border: #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.follow-status input[type="submit"]:hover{
+    background-color: rgb(59, 114, 96);
+}

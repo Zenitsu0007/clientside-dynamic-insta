@@ -1,0 +1,61 @@
+body,
+h1,
+h2,
+h3,
+p,
+a {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica', sans-serif;
+}
+
+body {
+    width: 40%;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 40px;
+}
+
+header nav a {
+    color: #262626;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.navbar-right a {
+    color: #003569;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0 10px;
+}
+
+form{
+    margin-top: 20px;
+}
+
+form input[type="submit"] {
+    width: 40%;
+    border: black;
+    border-radius: 5px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+form input[type="submit"]:hover{
+    background-color: rgb(203, 63, 8);
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>insta485</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='/css/following_style.css')}}"
+    />
+  </head>
+
+  <body>
+    <!-- Navigation Links -->
+    <header>
+      <nav>
+        <a href="/">insta485</a>
+        <div class="navbar-right">
+          <a href="/explore/">Explore</a>
+          <a href="/users/{{ logname }}/">{{ logname }}</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Following -->
+    <div class="following-title">
+      <p>Following</p>
+    </div>
+
+    {% for follow in following %}
+    <div class="following">
+      <div class="following-info">
+        <img
+          src="{{ url_for('uploaded_file', filename=follow.user_img_url) }}"
+          alt="Profile Picture"
+        />
+        <a href="/users/{{ follow.username }}/">{{ follow.username }}</a>
+      </div>
+      <div class="follow-status">
+        {% if logname != follow.username %} {% if
+        follow.logname_follows_username %}
+        <p>following</p>
+        <!-- Unfollow Form -->
+        <form
+          action="/following/?target=/users/{{ username }}/following/"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="submit" name="unfollow" value="unfollow" />
+          <input type="hidden" name="username" value="{{ follow.username }}" />
+          <input type="hidden" name="operation" value="unfollow" />
+        </form>
+        {% else %}
+        <p>not following</p>
+        <!-- Follow Form -->
+        <form
+          action="/following/?target=/users/{{ username }}/following/"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="submit" name="follow" value="follow" />
+          <input type="hidden" name="username" value="{{ follow.username }}" />
+          <input type="hidden" name="operation" value="follow" />
+        </form>
+        {% endif %} {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </body>
+</html>

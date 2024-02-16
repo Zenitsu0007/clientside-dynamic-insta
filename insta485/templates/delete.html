@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>insta485</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/css/delete_style.css') }}"
+    />
+  </head>
+
+  <!-- Navigation Section -->
+  <body>
+    <header>
+      <nav>
+        <a href="{{ url_for('show_index') }}">insta485</a>
+        <div class="navbar-right">
+          <a href="/explore/">Explore</a>
+          <a href="/users/{{ logname }}/">{{ logname }}</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Confirmation Message -->
+    <div>
+      <h2>Confirm Account Deletion</h2>
+      <!-- Account Deletion Form -->
+      <form
+        action="/accounts/?target={{ url_for('create')}}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <input type="submit" name="delete" value="confirm delete account" />
+        <input type="hidden" name="operation" value="delete" />
+      </form>
+    </div>
+  </body>
+</html>

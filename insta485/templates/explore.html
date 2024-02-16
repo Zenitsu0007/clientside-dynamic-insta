@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>insta485</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='/css/explore_style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Navigation Links -->
+    <header>
+      <nav>
+        <a href="/">insta485</a>
+        <div class="navbar-right">
+          <a href="/explore/">Explore</a>
+          <a href="/users/{{ logname }}/">{{ logname }}</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Explore -->
+    <div class="explore-title">
+      <p>Discover People</p>
+    </div>
+
+    {% for people in not_following %}
+    <div class="people">
+      <div class="people-info">
+        <img
+          src="{{ url_for('uploaded_file', filename=people.user_img_url) }}"
+          alt="Profile Picture"
+        />
+        <a href="/users/{{ people.username }}/">{{ people.username }}</a>
+      </div>
+      <!-- Follow Form -->
+      <form
+        action="/following/?target=/explore/"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <input type="submit" name="follow" value="follow" />
+        <input type="hidden" name="username" value="{{ people.username }}" />
+        <input type="hidden" name="operation" value="follow" />
+      </form>
+    </div>
+    {% endfor %}
+  </body>
+</html>

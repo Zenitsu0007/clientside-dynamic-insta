@@ -1,0 +1,153 @@
+body,
+h1,
+h2,
+h3,
+p,
+a {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica', sans-serif;
+}
+
+body {
+    width: 40%;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 40px;
+}
+
+header nav a {
+    color: #262626;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.navbar-right a {
+    color: #003569;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0 10px;
+}
+
+.user-name {
+    display: flex;
+    align-items: left;
+    font-size: 36px;
+    font-weight: normal;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+
+.account-edit {
+    border: #262626;
+}
+
+.account-edit a {
+    color: #262626;
+    display: flex;
+    align-items: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 50px;
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.account-edit form {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.account-edit input[type="submit"] {
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    padding: 6px 5%;
+    border: black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logout{
+    width: 90%;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.account-edit input[type="submit"]:hover {
+    background-color: rgb(61, 120, 101);
+    color: white;
+}
+
+.user-info,
+.follow-status {
+    display: flex;
+    align-items: left;
+    font-size: 18px;
+    font-weight: normal;
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.follow-status form {
+    margin-left: 10px;
+}
+
+.follow-status input[type="submit"] {
+    display: flex;
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    padding: 6px 10px;
+    border: black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.follow-status input[type="submit"]:hover{
+    background-color: rgb(59, 114, 96);
+}
+
+.user-info a {
+    color: #262626;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.user-real-name {
+    display: flex;
+    align-items: left;
+    font-size: 18px;
+    font-weight: normal;
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.image-post-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 40px;
+}
+
+.image-link {
+    margin: 20px 10px;
+}
+
+.image-link img {
+    max-width: 100%;
+    height: auto;
+}

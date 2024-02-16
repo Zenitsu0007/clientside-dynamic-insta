@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# insta485db
+#
+# (create|destroy|reset|dump)
+
+# Stop on errors
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+
+# Sanity check command line options
+usage() {
+    echo "Usage: $0 (create|destroy|reset|dump)"
+}
+
+create_db() {
+    if [ -f "var/insta485.sqlite3" ]; then
+      echo "Error: database already exists"
+      exit 1
+    else
+      mkdir -p var/uploads
+      sqlite3 var/insta485.sqlite3 < sql/schema.sql
+      sqlite3 var/insta485.sqlite3 < sql/data.sql
+      cp sql/uploads/* var/uploads/
+    fi
+}
+
+destroy_db() {
+    rm -rf var/insta485.sqlite3 var/uploads
+}
+
+reset_db() {
+    destroy_db
+    create_db
+}
+
+dump_all() {
+    for table in comments following likes posts users; do
+    sqlite3 -batch -line var/insta485.sqlite3 "SELECT * FROM $table"
+    done
+}
+
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+
+# Parse argument.  $1 is the first argument
+case $1 in
+  "create")
+    create_db
+    ;;
+
+  "destroy")
+    destroy_db
+    ;;
+
+  "reset")
+    reset_db
+    ;;
+
+  "dump")
+    dump_all
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

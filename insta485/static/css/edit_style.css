@@ -1,0 +1,102 @@
+body,
+h1,
+h2,
+h3,
+p,
+a {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica', sans-serif;
+}
+
+body {
+    width: 40%;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 40px;
+}
+
+header nav a {
+    color: #262626;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.navbar-right a {
+    color: #003569;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0 10px;
+}
+
+form {
+    max-width: 300px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="file"],
+input[type="text"],
+input[type="submit"] {
+    width: 92%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: rgb(59, 114, 96);
+}
+
+.edit_links{
+    display: block;
+    text-align: center;
+    margin: 10px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.user-profile {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.user-profile .profile-picture {
+    width: 100px; 
+    height: 100px; 
+    border-radius: 10px; 
+    border: 2px solid #dbdbdb;
+    object-fit: cover; 
+    margin-bottom: 20px;
+}
+
+.user-profile h2 {
+    color: #262626;
+    margin-bottom: 20px;
+    font-size: 24px; /* Adjust size as needed */
+    font-weight: bold;
+}
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Stop on errors, print commands
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+
+# Path to the SQLite database file
+DATABASE_FILE="var/insta485.sqlite3"
+
+# Check if the database file exists
+if [ ! -f "$DATABASE_FILE" ]; then
+    echo "Error: can't find database $DATABASE_FILE"
+    echo "Try: ./bin/insta485db create"
+    exit 1
+fi
+
+set -x
+# Run the Flask development server
+flask --app insta485 --debug run --host 0.0.0.0 --port 8000

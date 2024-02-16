@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>insta485</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/css/edit_style.css') }}"
+    />
+  </head>
+
+  <!-- Navigation Section -->
+  <body>
+    <header>
+      <nav>
+        <a href="{{ url_for('show_index') }}">insta485</a>
+        <div class="navbar-right">
+          <a href="/explore/">Explore</a>
+          <a href="/users/{{ logname }}/">{{ logname }}</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- User Profile Info-->
+    <div class="user-profile">
+      <img
+        src="{{ url_for('uploaded_file', filename=user_info.filename) }}"
+        alt="Profile Picture"
+        class="profile-picture"
+      />
+      <h2>{{ logname }}</h2>
+    </div>
+
+    <!-- Edit Profile -->
+    <form
+      action="/accounts/?target={{url_for('edit')}}"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      Photo<input type="file" name="file" accept="image/*" />
+      Name<input type="text" name="fullname" value="{{ user_info.fullname }}" 
+      placeholder="Fullname" required/>
+      Email<input type="text" name="email" value="{{ user_info.email }}" 
+      placeholder="Email" required />
+      <input type="submit" name="update" value="submit" />
+      <input type="hidden" name="operation" value="edit_account" />
+    </form>
+    <!-- Links -->
+      <a href="{{ url_for('password') }}" class="edit_links">Change Password</a>
+      <a href="{{ url_for('delete') }}" class="edit_links">Delete Account</a>
+  </body>
+</html>
