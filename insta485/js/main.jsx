@@ -10,5 +10,5 @@ const root = createRoot(document.getElementById("reactEntry"));
 root.render(
   <StrictMode>
     <Post url="/api/v1/posts/1/" />
-  </StrictMode>
+  </StrictMode>,
 );
