@@ -20,75 +20,11 @@
       </nav>
     </header>
 
-    <!-- Posts Section -->
-    <main>
-      {% for post in posts %}
-      <article class="post">
-        <header class="post-header">
-          <div class="post-user">
-            <a class="profile-pic" href="/users/{{ post.owner }}/">
-              <img
-                src="{{ url_for('uploaded_file', filename=post.owner_img_url) }}"
-                alt="Profile Picture"
-              />
-            </a>
-            <a href="/users/{{ post.owner }}/">{{ post.owner }}</a>
-          </div>
-          <div class="time">
-            <a href="/posts/{{ post.postid }}/">{{ post.timestamp }}</a>
-          </div>
-        </header>
-        <img
-          src="{{ url_for('uploaded_file', filename=post.img_url) }}"
-          alt="Post Image"
-        />
-        <footer>
-          <div class="likes">
-            {% if post.likes == 1 %}
-            <p>1 like</p>
-            {% elif post.likes > 1 %}
-            <p>{{ post.likes }} likes</p>
-            {% else %}
-            <p>0 likes</p>
-            {% endif %}
-          </div>
-          <div class="comments">
-            {% for comment in post.comments %}
-            <p>
-              <a href="/users/{{ comment.owner }}/">{{ comment.owner }}</a>
-              {{ comment.text }}
-            </p>
-            {% endfor %}
-          </div>
-          <div class="comment_like">
-            <!--like/ulike button-->
-            {% if post.cur_liked == False %}
-              <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
-              <form action="/likes/?target=/" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="operation" value="like"/>
-                <input type="hidden" name="postid" value="{{ post.postid }}"/>
-                <input type="submit" name="like" value="like"/>
-              </form>
-            {% else %}
-              <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
-              <form action="/likes/?target=/" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="operation" value="unlike"/>
-                <input type="hidden" name="postid" value="{{ post.postid }}"/>
-                <input type="submit" name="unlike" value="unlike"/>
-              </form>
-            {% endif %}
-            <!--comment button-->
-            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
-            <form action="/comments/?target=/" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="operation" value="create"/>
-              <input type="hidden" name="postid" value="{{ post.postid }}"/>
-              <input type="text" name="text" placeholder="Type your comment here" required/>
-              <input type="submit" name="comment" value="comment"/>
-            </form>
-          </div>          
-        </footer>
-      </article>
-      {% endfor %}
-    </main>
+    <div id="reactEntry">
+      Loading ...
+    </div>
+    <!-- Load JavaScript -->
+    <script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+    
   </body>
 </html>
