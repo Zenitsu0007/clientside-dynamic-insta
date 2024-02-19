@@ -2,6 +2,7 @@
 import flask
 import insta485
 
+
 @insta485.app.route('/api/v1/likes/', methods=['POST'])
 def create_like():
     """Create a new like for the specified post id."""
@@ -49,6 +50,7 @@ def create_like():
         "url": f"/api/v1/likes/{likeid}/"
     }
     return flask.jsonify(**context), 201
+
 
 @insta485.app.route('/api/v1/likes/<likeid>/', methods=['DELETE'])
 def delete_like(likeid):
