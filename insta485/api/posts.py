@@ -1,15 +1,11 @@
 """REST API for posts."""
-import hashlib
-import os
-import uuid
-import arrow
+import sys
 import flask
 import insta485
-import sys
 
 
 @insta485.app.route("/api/v1/posts/", methods = ["GET"])
-def get_post_list():
+def get_some_posts():
     """Show a list of posts."""
     # HTTP authorization for user
     auth_response = insta485.api.index.check_authentication()
@@ -32,7 +28,6 @@ def get_post_list():
         return flask.jsonify(error_response), 400
     # Connect to the database
     connection = insta485.model.get_db()
-    # We want posts 
     query = '''
     SELECT DISTINCT p.postid
     FROM posts p
@@ -46,10 +41,9 @@ def get_post_list():
     post_ids = [item['postid'] for item in posts]
     # latest post id
     if not flask.request.args.get("postid_lte") and post_ids:
-      postid_lte = max(post_ids)
+        postid_lte = max(post_ids)
     # Construct results
-    results = [{"postid": post_id, "url": f"/api/v1/posts/{post_id}/"} 
-               for post_id in post_ids]
+    results = [{"postid": post_id, "url": f"/api/v1/posts/{post_id}/"} for post_id in post_ids]
     # Current url
     url_now = flask.url_for("get_some_posts",
                         size=flask.request.args.get("size"),
@@ -57,10 +51,9 @@ def get_post_list():
                         postid_lte=flask.request.args.get("postid_lte"))
     # Next field url
     if len(post_ids) < size:
-      next_field =""
-    else: 
-      next_field = flask.url_for("get_some_posts",size=size,page=page + 1,
-                        postid_lte=postid_lte)
+        next_field =""
+    else:
+        next_field = flask.url_for("get_some_posts",size=size,page=page + 1, postid_lte=postid_lte)
     context = {
         "next": next_field,
         "results": results,
