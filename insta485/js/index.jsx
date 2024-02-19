@@ -1,61 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Post from "./post";
 
 export default function Index({ url }) {
-    // Initialize the next url and postslists (results list in json file)
+    window.history.scrollRestoration = "manual";
+    // Initialize the next url and posts lists (results list in json file)
     const [next, setNext] = useState(url);
     const [posts, setPosts] = useState([]);
-
-    useEffect(() => {
-        window.history.scrollRestoration = "manual";
-        fetch(url, { credentials: "same-origin" })
-        .then((response) => {
-            if (!response.ok) throw Error(response.statusText);
-            return response.json();
-        })
-        .then((data) => {
-        // If ignoreStaleRequest was set to true, we want to ignore the results of the
-        // the request. Otherwise, update the state to trigger a new render.
-            setNext(data.next);
-            setPosts(data.results);
-        })
-        .catch((error) => console.log(error));
-        return () => {
-            // This is a cleanup function that runs whenever the Post component
-            // unmounts or re-renders. If a Post is about to unmount or re-render,
-            // should avoid updating state.
-        };
-    }, [url]);
-
     const fetchNext = () => {
-        // Implement infinite scrolling by keep adding posts to post data
-        fetch(next, { credentials: "same-origin" })
-        .then((response) => {
+        // For initialize
+        const fetchUrl = posts.length > 0 ? next : url;
+        fetch(fetchUrl, { credentials: "same-origin" })
+        .then(response => {
             if (!response.ok) throw Error(response.statusText);
             return response.json();
         })
-        .then((data) => {
+        .then(data => {
             setNext(data.next);
-            setPosts([...posts,...data.results]);
+            setPosts([...posts, ...data.results]);
         })
-        .catch((error) => console.log(error));
+        .catch(error => console.log(error));
     };
 
+    if (posts.length === 0) fetchNext();
+
     return (
-        // Return the index.html with infinite scrolling
-        <div className="scrollableDiv" style={{overflow: 'auto'}}>
+        <div className="scrollableDiv" style={{ overflow: 'auto' }}>
             <InfiniteScroll
-            dataLength={posts.length}
-            hasMore={next!== null}
-            next={fetchNext}
-            loader={<h4>Loading...</h4>}>   
-                {posts.map((results) => (
-                    <div key={results.postid}>
-                        <Post url={results.url} postid={results.postid}/>
-                    </div>
-                ))}
+                dataLength={posts.length}
+                hasMore={!!next && next !== ""}
+                next={fetchNext}
+                loader={next !== null && next !== "" ? 
+                <h4>Loading...</h4> : 
+                <h4>No more posts</h4>}>
+                    {posts.map((result) => (
+                        <div key={result.postid}>
+                            <Post url={result.url} postid={result.postid}/>
+                        </div>
+                    ))}
             </InfiniteScroll>
         </div>
     );

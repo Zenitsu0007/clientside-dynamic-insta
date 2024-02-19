@@ -2,6 +2,7 @@ body,
 h1,
 h2,
 h3,
+h4,
 p,
 a {
     margin: 0;
@@ -103,15 +104,6 @@ header nav a {
     margin-right: 5px;
 }
 
-.comments button {
-    background-color: #000;
-    color: #fff;
-    border: none;
-    padding: 6px 16px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-left: auto;
-}
 
 .comment-item {
     display: flex;
@@ -160,4 +152,27 @@ header nav a {
 }
 .comment_like input[type = "submit"]:hover{
     background-color: rgb(59, 114, 96);
+}
+
+.comments form {
+    margin-left: auto;
+}
+
+.comment_delete{
+    display: flex;
+    align-items: right;
+    background-color: lightblue;
+    color: black;
+    padding: 3px 3px 3px;
+    border: grey;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.comment_delete:hover {
+    background-color: rgb(158, 78, 78); 
+    color: white;
 }
