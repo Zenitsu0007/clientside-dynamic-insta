@@ -9,7 +9,10 @@ def create_like():
     if response is not None:
         return response
     # If authorization successful, reads username from response
-    username = response
+    if 'username' in flask.session:
+        username = flask.session['username']
+    else:
+        username = flask.request.authorization['username']
 
     postid = flask.request.args.get('postid', type=int)
     if postid is None:
@@ -36,7 +39,10 @@ def create_like():
     query = 'INSERT INTO likes (owner, postid) VALUES (?, ?)'
     cur = db.execute(query, (username, postid))
     db.commit()
-    likeid = cur.lastrowid
+
+    query = 'SELECT likeid FROM likes WHERE owner = ? AND postid = ?'
+    likeid = db.execute(query, (username, postid)).fetchone()['likeid']
+
     context = {
         "likeid": likeid,
         "url": f"/api/v1/likes/{likeid}/"
