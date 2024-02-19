@@ -11,7 +11,7 @@ dayjs.extend(utc);
 
 // The parameter of this function is an object with a string called url inside it.
 // url is a prop for the Post component.
-export default function Post({ url }) {
+export default function Post({ url, postid }) {
   /* Display image and post owner of a single post */
 
   const [comments, setComments] = useState([]);
@@ -74,7 +74,7 @@ export default function Post({ url }) {
 
   // Render post image and post owner
   return (
-    <article className="post">
+    <div className="post">
       <header className="post-header">
         <div className="post-user">
           <a className="profile-pic" href={ownerShowUrl}>
@@ -93,10 +93,11 @@ export default function Post({ url }) {
           <PostComment url={commentsUrl} setComments={setComments} />
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 
 Post.propTypes = {
-  url: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    postid: PropTypes.number.isRequired
 };
