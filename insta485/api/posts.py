@@ -97,7 +97,7 @@ def get_post_detail(postid_url_slug):
     context = {
         "comments": comments_list,
         "comments_url": f"/api/v1/comments/?postid={postid_url_slug}",
-        "created": "",
+        "created": post['created'],
         "imgUrl": f"/uploads/{post['filename']}",
         "likes": likes,
         "owner": post['owner'],
