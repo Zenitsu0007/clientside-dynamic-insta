@@ -1,10 +1,9 @@
 """REST API for posts."""
-import hashlib
 import flask
 import insta485
 
 
-@insta485.app.route('/api/v1/posts/', methods = ['GET'])
+@insta485.app.route("/api/v1/posts/", methods = ["GET"])
 def get_post():
     """Return post on postid."""
 
