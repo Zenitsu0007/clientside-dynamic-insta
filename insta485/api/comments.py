@@ -85,7 +85,7 @@ def delete_comment(commentid):
     # If the user does not own the comment, return a 403 error
     if comment['owner'] != username:
         error_response = {"message": "Forbidden", "status_code": 403}
-        return flask.jsonify(error_response), 403
+        return flask.jsonify(**error_response), 403
 
     # Delete the comment from the database
     connection.execute(
@@ -95,4 +95,4 @@ def delete_comment(commentid):
     connection.commit()
 
     # Return a 204 NO CONTENT status to indicate success
-    return flask.jsonify({}), 204
+    return flask.jsonify(**{}), 204
