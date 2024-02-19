@@ -57,7 +57,7 @@ export default function Post({ url }) {
       <header className="post-header">
         <div className="post-user">
           <a className="profile-pic" href={ownerShowUrl}>
-            <img src={ownerImgUrl} alt="Loading Profile Pic" />
+            <img src={ownerImgUrl} alt="profile_picture" />
           </a>
           <a href={ownerShowUrl}>{owner}</a>
         </div>

@@ -1,5 +1,4 @@
 """REST API for posts."""
-import sys
 import flask
 import insta485
 
@@ -19,15 +18,22 @@ def get_some_posts():
         username = flask.request.authorization['username']
 
     # Get arguments
-    postid_lte = flask.request.args.get('postid_lte', default=sys.maxsize, type=int)
+    connection = insta485.model.get_db()
+
+    # Get most recent post id
+    cur = connection.execute('SELECT MAX(postid) AS max_post_id FROM posts')
+    most_recent_post_id = cur.fetchone()['max_post_id']
+
+    postid_lte = flask.request.args.get('postid_lte', default=most_recent_post_id, type=int)
     size = flask.request.args.get('size', default=10, type=int)
     page = flask.request.args.get('page', default=0, type=int)
+
     # Check if page and size are valid
     if size <= 0 or page < 0:
-        error_response = {"message": "Bad Request","status_code": "400"}
-        return flask.jsonify(error_response), 400
-    # Connect to the database
-    connection = insta485.model.get_db()
+        error_response = {"message": "Bad Request","status_code": 400}
+        return flask.jsonify(**error_response), 400
+
+    # query for posts
     query = '''
     SELECT DISTINCT p.postid
     FROM posts p
@@ -36,12 +42,14 @@ def get_some_posts():
     ORDER BY p.postid DESC
     LIMIT ? OFFSET ?
     '''
-    cur = connection.execute(query, (postid_lte,username, username, size, size*page))
+    cur = connection.execute(query, (postid_lte, username, username, size, size*page))
     posts = cur.fetchall()
     post_ids = [item['postid'] for item in posts]
-    # latest post id
-    if not flask.request.args.get("postid_lte") and post_ids:
-        postid_lte = max(post_ids)
+
+    # # latest post id
+    # if not flask.request.args.get("postid_lte") and post_ids:
+    #     postid_lte = max(post_ids)
+
     # Construct results
     results = [{"postid": post_id, "url": f"/api/v1/posts/{post_id}/"} for post_id in post_ids]
     # Current url
@@ -51,9 +59,9 @@ def get_some_posts():
                         postid_lte=flask.request.args.get("postid_lte"))
     # Next field url
     if len(post_ids) < size:
-        next_field =""
+        next_field = ""
     else:
-        next_field = flask.url_for("get_some_posts",size=size,page=page + 1, postid_lte=postid_lte)
+        next_field = flask.url_for("get_some_posts", size=size, page=page+1, postid_lte=postid_lte)
     context = {
         "next": next_field,
         "results": results,
