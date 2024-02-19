@@ -19,7 +19,8 @@ def check_authentication():
     """Check authentication."""
     if flask.session:
         if 'username' not in flask.session:
-            error_response = {'message': 'Not logged in, Forbidden', 'status_code': 403}
+            # Not logged in
+            error_response = {'message': 'Forbidden', 'status_code': 403}
             return flask.jsonify(**error_response), 403
     elif flask.request.authorization:
         username = flask.request.authorization['username']
@@ -45,14 +46,15 @@ def check_authentication():
 
             # Compare the computed hash with the stored hash
             if computed_hash != stored_hash:
-                # Authentication failed
-                error_response = {'message': 'Wrong password, Forbidden', 'status_code': 403}
+                # Wrong password
+                error_response = {'message': 'Forbidden', 'status_code': 403}
                 return flask.jsonify(**error_response), 403
         else:
             # User not found
-            error_response = {'message': 'User not found, Forbidden','status_code': 403}
+            error_response = {'message': 'Forbidden','status_code': 403}
             return flask.jsonify(**error_response), 403
     else:
-        error_response = {'message': 'Access w/o authentication, Forbidden','status_code': 403}
+        # Access without authentication
+        error_response = {'message': 'Forbidden','status_code': 403}
         return flask.jsonify(**error_response), 403
     return None
