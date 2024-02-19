@@ -71,7 +71,7 @@ def get_post_detail(postid_url_slug):
         'ownerShowUrl': f"/users/{comment['owner']}/"
     }
     for comment in comments
-]
+    ]
 
     # Fetch like details
     like = connection.execute(
