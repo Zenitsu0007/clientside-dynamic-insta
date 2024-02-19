@@ -9,11 +9,15 @@ def get_post():
     """Return post on postid."""
 
     # HTTP authorization for user
-    response = insta485.api.index.check_authentication()
-    if response is not None:
-        return response
-    # If authorization successful, reads username from response
-    username = response
+    auth_response = insta485.api.index.check_authentication()
+    if auth_response is not None:
+        return auth_response
+
+    # Extract username from session or basic auth
+    if 'username' in flask.session:
+        username = flask.session['username']
+    else:
+        username = flask.request.authorization['username']
 
     context = {
         "created": "2017-09-28 04:33:28",

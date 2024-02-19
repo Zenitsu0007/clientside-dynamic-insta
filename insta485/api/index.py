@@ -19,7 +19,6 @@ def check_authentication():
         if 'username' not in flask.session:
             error_response = {'message': 'Not logged in, Forbidden', 'status_code': '403'}
             return flask.jsonify(**error_response), 403
-        username = flask.session['username']
     elif flask.request.authorization:
         username = flask.request.authorization['username']
         password = flask.request.authorization['password']
@@ -54,4 +53,4 @@ def check_authentication():
     else:
         error_response = {'message': 'Access w/o authentication, Forbidden','status_code': '403'}
         return flask.jsonify(**error_response), 403
-    return username
+    return None
