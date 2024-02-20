@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
+import PostComment from "./post_comment";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -12,6 +13,8 @@ dayjs.extend(utc);
 export default function Post({ url }) {
   /* Display image and post owner of a single post */
 
+  const [comments, setComments] = useState([]);
+  const [commentsUrl, setCommentsUrl] = useState("");
   const [created, setCreated] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [owner, setOwner] = useState("");
@@ -33,6 +36,8 @@ export default function Post({ url }) {
         // If ignoreStaleRequest was set to true, we want to ignore the results of the
         // the request. Otherwise, update the state to trigger a new render.
         if (!ignoreStaleRequest) {
+          setComments(data.comments);
+          setCommentsUrl(data.comments_url);
           setCreated(data.created);
           setImgUrl(data.imgUrl);
           setOwner(data.owner);
@@ -51,6 +56,13 @@ export default function Post({ url }) {
     };
   }, [url]);
 
+  const CommentList = comments.map((comment) => (
+    <p key={comment.commentid}>
+      <a href={comment.ownerShowUrl}>{comment.owner}</a>
+      <span data-testid="comment-text">{comment.text}</span>
+    </p>
+  ));
+
   // Render post image and post owner
   return (
     <article className="post">
@@ -66,6 +78,12 @@ export default function Post({ url }) {
         </div>
       </header>
       <img src={imgUrl} alt="post_image" />
+      <div>
+        <div className="comments">{CommentList}</div>
+        <div className="comment_like">
+          <PostComment url={commentsUrl} setComments={setComments} />
+        </div>
+      </div>
     </article>
   );
 }
