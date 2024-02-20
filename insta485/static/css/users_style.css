@@ -137,7 +137,8 @@ header nav a {
 }
 
 .image-post-links {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
     margin: 20px 40px;
@@ -148,6 +149,6 @@ header nav a {
 }
 
 .image-link img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
 }
