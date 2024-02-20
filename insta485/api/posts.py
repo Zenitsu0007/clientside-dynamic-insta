@@ -27,7 +27,7 @@ def get_some_posts():
     size = flask.request.args.get('size', default=10, type=int)
     page = flask.request.args.get('page', default=0, type=int)
     if postid_lte is None:
-      postid_lte = cur.fetchone()['max_post_id']
+        postid_lte = cur.fetchone()['max_post_id']
     # Check if page and size are valid
     if size <= 0 or page < 0:
         error_response = {"message": "Bad Request","status_code": 400}
@@ -61,7 +61,7 @@ def get_some_posts():
     if len(post_ids) < size:
         next_field = ""
     else:
-        next_field = flask.url_for("get_some_posts", size=size, page=page + 1, postid_lte=postid_lte)
+        next_field = flask.url_for("get_some_posts", size=size, page=page+1, postid_lte=postid_lte)
 
     context = {
         "next": next_field,
@@ -131,7 +131,7 @@ def get_post_detail(postid_url_slug):
 
     owner_image_url = connection.execute(
         'SELECT filename FROM users WHERE username = ?', 
-        (username,)
+        (post['owner'],)
     ).fetchone()
 
     # Construct the response

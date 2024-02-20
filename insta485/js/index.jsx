@@ -45,5 +45,5 @@ export default function Index({ url }) {
 }
 
 Index.propTypes = {
-    url: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 };

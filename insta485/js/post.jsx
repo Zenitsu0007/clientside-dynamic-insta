@@ -55,7 +55,7 @@ export default function Post({ url, postid }) {
       // should avoid updating state.
       ignoreStaleRequest = true;
     };
-  }, [url]);
+  }, [url, postid]);
 
   const CommentList = comments.map((comment) => (
     <div key={comment.commentid} className="comment-item">
@@ -98,6 +98,6 @@ export default function Post({ url, postid }) {
 }
 
 Post.propTypes = {
-    url: PropTypes.string.isRequired,
-    postid: PropTypes.number.isRequired
+  url: PropTypes.string.isRequired,
+  postid: PropTypes.number.isRequired,
 };
