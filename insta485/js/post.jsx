@@ -5,13 +5,15 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import PostComment from "./post_comment";
 import DeleteComment from "./delete_comment";
+import Likes from "./likes";
+
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
 // The parameter of this function is an object with a string called url inside it.
 // url is a prop for the Post component.
-export default function Post({ url }) {
+export default function Post({ url, postid }) {
   /* Display image and post owner of a single post */
 
   const [comments, setComments] = useState([]);
@@ -22,6 +24,11 @@ export default function Post({ url }) {
   const [ownerImgUrl, setOwnerImgUrl] = useState("");
   const [ownerShowUrl, setOwnerShowUrl] = useState("");
   const [postShowUrl, setPostShowUrl] = useState("");
+  const [likes, setLikes] = useState({
+    lognameLikesThis: false,
+    numLikes: 0,
+    url: null,
+  });
 
   useEffect(() => {
     // Declare a boolean flag that we can use to cancel the API request.
@@ -44,7 +51,16 @@ export default function Post({ url }) {
           setOwner(data.owner);
           setOwnerImgUrl(data.ownerImgUrl);
           setOwnerShowUrl(data.ownerShowUrl);
-          setPostShowUrl(data.postShowUrl);
+          setPostShowUrl(data.postShowUrl); 
+          if (data.likes.lognameLikesThis) {
+            setLikes(data.likes);
+          } else {
+            setLikes({
+              lognameLikesThis: data.likes.lognameLikesThis,
+              numLikes: data.likes.numLikes,
+              url: `/api/v1/likes/?postid=${postid}`,
+            });
+          }
         }
       })
       .catch((error) => console.log(error));
@@ -55,7 +71,7 @@ export default function Post({ url }) {
       // should avoid updating state.
       ignoreStaleRequest = true;
     };
-  }, [url]);
+  }, [url, postid]);
 
   const CommentList = comments.map((comment) => (
     <div key={comment.commentid} className="comment-item">
@@ -71,6 +87,54 @@ export default function Post({ url }) {
       )}
     </div>
   ));
+
+  // Handle like/unlike action
+  const handleLike = () => {
+    // Determine the method based on currrnt like status
+    const methods = likes.lognameLikesThis ? "DELETE" : "POST";
+    const actionUrl = likes.url;
+    console.log(actionUrl);
+
+    fetch(actionUrl, {
+      method: methods,
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok.');
+      return response.json();
+    })
+    .then(data => {
+      setLikes(prevLikes => {
+        // Toggle the like status
+        const updatedLognameLikesThis = !prevLikes.lognameLikesThis;
+    
+        // Determine the new number of likes
+        const updatedNumLikes = updatedLognameLikesThis ? prevLikes.numLikes + 1 : prevLikes.numLikes - 1;
+    
+        // Update the URL for the next action
+        // For a like action, use the URL from the response
+        // For an unlike action, you might revert to a generic URL or handle differently based on your API
+        let updatedUrl = prevLikes.url;
+        if (updatedLognameLikesThis) { // If it's now liked, the server's response should provide the next action's URL
+          updatedUrl = data.url; // Assuming this is the URL for the unlike action
+        } else {
+          // For an unlike action, prepare the URL for the next like action.
+          // This might involve setting a generic URL or constructing it based on known patterns.
+          updatedUrl = `/api/v1/likes/?postid=${postid}`; // Example, adjust based on your API
+        }
+    
+        return {
+          ...prevLikes,
+          lognameLikesThis: updatedLognameLikesThis,
+          numLikes: updatedNumLikes,
+          url: updatedUrl,
+        };
+      });
+    })
+    .catch(error => console.error('Error:', error));
+
+  };
 
   // Render post image and post owner
   return (
@@ -90,6 +154,7 @@ export default function Post({ url }) {
       <div>
         <div className="comments">{CommentList}</div>
         <div className="comment_like">
+          <Likes likes={likes} handleLike={handleLike} />
           <PostComment url={commentsUrl} setComments={setComments} />
         </div>
       </div>
@@ -99,4 +164,5 @@ export default function Post({ url }) {
 
 Post.propTypes = {
   url: PropTypes.string.isRequired,
+  postid: PropTypes.number.isRequired,
 };
