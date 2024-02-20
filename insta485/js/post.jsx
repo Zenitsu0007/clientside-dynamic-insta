@@ -24,11 +24,7 @@ export default function Post({ url, postid }) {
   const [ownerImgUrl, setOwnerImgUrl] = useState("");
   const [ownerShowUrl, setOwnerShowUrl] = useState("");
   const [postShowUrl, setPostShowUrl] = useState("");
-  const [likes, setLikes] = useState({
-    lognameLikesThis: false,
-    numLikes: 0,
-    url: null,
-  });
+  const [likes, setLikes] = useState({});
 
   useEffect(() => {
     // Declare a boolean flag that we can use to cancel the API request.
@@ -93,7 +89,6 @@ export default function Post({ url, postid }) {
     // Determine the method based on currrnt like status
     const methods = likes.lognameLikesThis ? "DELETE" : "POST";
     const actionUrl = likes.url;
-    console.log(actionUrl);
 
     fetch(actionUrl, {
       method: methods,
@@ -102,35 +97,25 @@ export default function Post({ url, postid }) {
     })
     .then(response => {
       if (!response.ok) throw new Error('Network response was not ok.');
-      return response.json();
+      return (methods === "POST" ? response.json() : Promise.resolve()); 
+      // THIS LINE IS VERY IMPORTANT!!! detele request does not return a json object
     })
     .then(data => {
-      setLikes(prevLikes => {
-        // Toggle the like status
-        const updatedLognameLikesThis = !prevLikes.lognameLikesThis;
-    
-        // Determine the new number of likes
-        const updatedNumLikes = updatedLognameLikesThis ? prevLikes.numLikes + 1 : prevLikes.numLikes - 1;
-    
-        // Update the URL for the next action
-        // For a like action, use the URL from the response
-        // For an unlike action, you might revert to a generic URL or handle differently based on your API
-        let updatedUrl = prevLikes.url;
-        if (updatedLognameLikesThis) { // If it's now liked, the server's response should provide the next action's URL
-          updatedUrl = data.url; // Assuming this is the URL for the unlike action
-        } else {
-          // For an unlike action, prepare the URL for the next like action.
-          // This might involve setting a generic URL or constructing it based on known patterns.
-          updatedUrl = `/api/v1/likes/?postid=${postid}`; // Example, adjust based on your API
-        }
-    
-        return {
-          ...prevLikes,
-          lognameLikesThis: updatedLognameLikesThis,
-          numLikes: updatedNumLikes,
-          url: updatedUrl,
-        };
-      });
+      if (methods === "POST") {
+        // Handle state update for a successful "Like" action
+        setLikes({
+          lognameLikesThis: true,
+          numLikes: likes.numLikes + 1,
+          url: data.url, // Assuming this is how your server responds with the "Unlike" URL
+        });
+      } else {
+        // Handle state update for a successful "Unlike" action
+        setLikes(prevLikes => ({
+          lognameLikesThis: false,
+          numLikes: prevLikes.numLikes > 0 ? prevLikes.numLikes - 1 : 0, // Safeguard to prevent negative likes
+          url: `/api/v1/likes/?postid=${postid}`, // Reset or prepare the URL for a new "Like" action
+        }));
+      }
     })
     .catch(error => console.error('Error:', error));
 
@@ -153,7 +138,7 @@ export default function Post({ url, postid }) {
       <img src={imgUrl} alt="post_image" />
       <div>
         <div className="comments">{CommentList}</div>
-        <div className="comment_like">
+        <div>
           <Likes likes={likes} handleLike={handleLike} />
           <PostComment url={commentsUrl} setComments={setComments} />
         </div>

@@ -6,12 +6,12 @@ export default function Likes({ likes, handleLike}) {
     // Button text changes based on whether the user likes the post or not
     const likeText = `${likes.numLikes} ${likes.numLikes === 1 ? 'like' : 'likes'}`;
 
-    const buttonText = likes.lognameLikesthis ? 'Unlike' : 'Like';
+    const buttonText = likes.lognameLikesThis ? 'Unlike' : 'Like';
 
     return (
         <div>
-            <div className="likes">{likeText} </div>
-            <button onClick={handleLike} data-testid="like-unlike-button" type="button">
+            <div>{likeText} </div>
+            <button className="comment_like" onClick={handleLike} data-testid="like-unlike-button" type="button">
                 {buttonText}
             </button>
         </div>
@@ -20,7 +20,7 @@ export default function Likes({ likes, handleLike}) {
 
 Likes.propTypes = {
     likes: PropTypes.shape({
-        lognameLikesthis: PropTypes.bool,
+        lognameLikesThis: PropTypes.bool,
         numLikes: PropTypes.number,
         url:PropTypes.string,
     }).isRequired,
