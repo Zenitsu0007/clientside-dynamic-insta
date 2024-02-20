@@ -103,6 +103,27 @@ header nav a {
     margin-right: 5px;
 }
 
+.comments button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 6px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.comment-text {
+    flex-grow: 1;
+}
+
 .comment_like {
     width: 100%;
     display: flex;
