@@ -19,7 +19,7 @@ export default function PostComment({ url, setComments }) {
         credentials: "same-origin",
       })
         .then((response) => {
-          if (!response.ok) throw new Error("Fail to post comment");
+          if (!response.ok) throw new Error("Failed to post comment");
           return response.json();
         })
         .then((newComment) => {

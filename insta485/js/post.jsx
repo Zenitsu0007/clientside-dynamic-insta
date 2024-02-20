@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import PostComment from "./post_comment";
+import DeleteComment from "./delete_comment";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -57,10 +58,18 @@ export default function Post({ url }) {
   }, [url]);
 
   const CommentList = comments.map((comment) => (
-    <p key={comment.commentid}>
+    <div key={comment.commentid} className="comment-item">
       <a href={comment.ownerShowUrl}>{comment.owner}</a>
-      <span data-testid="comment-text">{comment.text}</span>
-    </p>
+      <span data-testid="comment-text" className="comment-text">
+        {comment.text}
+      </span>
+      {comment.lognameOwnsThis && (
+        <DeleteComment
+          commentId={comment.commentid}
+          setComments={setComments}
+        />
+      )}
+    </div>
   ));
 
   // Render post image and post owner
