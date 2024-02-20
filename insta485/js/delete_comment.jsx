@@ -25,6 +25,7 @@ export default function DeleteComment({ commentId, setComments }) {
       data-testid="delete-comment-button"
       type="button"
       onClick={handleDelete}
+      className= "comment_delete"
     >
       Delete
     </button>
