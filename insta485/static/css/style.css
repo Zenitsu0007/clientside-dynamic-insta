@@ -105,60 +105,50 @@ header nav a {
 }
 
 
-.comment-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 8px;
-}
-
-.comment-text {
-    flex-grow: 1;
-}
-
 .comment_like {
     width: 100%;
     display: flex;
     align-items: center;
     font-size: 12px;
-    margin-left: 3%;
+    margin-left: 10px;
     margin-bottom: 20px;
 }
 
 .comment_like form {
+    width: 60%;
     display: flex;
     align-items: center;
-    margin-right: 15px;
+    margin-left: 2%;
+    margin-right: 5%;
 }
 
-.comment_like form:last-child {
-    margin-right: 0;
-}
 
-.comment_like {
+.comment_like button {
     background-color: #000;
     color: #fff;
     border: none;
     padding: 6px 16px;
     cursor: pointer;
     font-weight: bold;
-    margin-right: 0;
-    margin-left: 15%;
-    padding: 5px 10%;
-    border: 1px solid #ccc;
+    border: black;
+    border-radius: 5px;
+    margin-left: 5%;
 }
 
-.comment_like:hover{
+.comment_like form input[type = "text"] {
+    width: 100%;
+    margin-left: 5%;
+    padding: 6px 20%;
+    border: 1px solid #ccc;
+    border-radius: 5%;
+}
+
+.comment_like button:hover{
     background-color: rgb(59, 114, 96);
 }
 
-.comments form {
-    margin-left: auto;
-}
-
-.comment_delete{
-    display: flex;
-    align-items: right;
+.comments button{
+    float: right;
     background-color: lightblue;
     color: black;
     padding: 3px 3px 3px;
@@ -167,10 +157,9 @@ header nav a {
     cursor: pointer;
     font-weight: bold;
     font-size: 12px;
-    margin-left: 10px;
 }
 
-.comment_delete:hover {
+.comments button:hover{
     background-color: rgb(158, 78, 78); 
     color: white;
 }

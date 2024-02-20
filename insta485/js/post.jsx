@@ -70,9 +70,9 @@ export default function Post({ url, postid }) {
   }, [url, postid]);
 
   const CommentList = comments.map((comment) => (
-    <div key={comment.commentid} className="comment-item">
+    <div key={comment.commentid}>
       <a href={comment.ownerShowUrl}>{comment.owner}</a>
-      <span data-testid="comment-text" className="comment-text">
+      <span data-testid="comment-text">
         {comment.text}
       </span>
       {comment.lognameOwnsThis && (
@@ -137,8 +137,9 @@ export default function Post({ url, postid }) {
       </header>
       <img src={imgUrl} alt="post_image" />
       <div>
+        <div className="likes">{`${likes.numLikes} ${likes.numLikes === 1 ? 'like' : 'likes'}`} </div>
         <div className="comments">{CommentList}</div>
-        <div>
+        <div className="comment_like">
           <Likes likes={likes} handleLike={handleLike} />
           <PostComment url={commentsUrl} setComments={setComments} />
         </div>
