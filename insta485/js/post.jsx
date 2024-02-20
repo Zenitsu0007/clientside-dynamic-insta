@@ -5,6 +5,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import PostComment from "./post_comment";
 import DeleteComment from "./delete_comment";
+import Likes from "./likes";
+
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -22,6 +24,7 @@ export default function Post({ url, postid }) {
   const [ownerImgUrl, setOwnerImgUrl] = useState("");
   const [ownerShowUrl, setOwnerShowUrl] = useState("");
   const [postShowUrl, setPostShowUrl] = useState("");
+  const [likes, setLikes] = useState({});
 
   useEffect(() => {
     // Declare a boolean flag that we can use to cancel the API request.
@@ -44,7 +47,16 @@ export default function Post({ url, postid }) {
           setOwner(data.owner);
           setOwnerImgUrl(data.ownerImgUrl);
           setOwnerShowUrl(data.ownerShowUrl);
-          setPostShowUrl(data.postShowUrl);
+          setPostShowUrl(data.postShowUrl); 
+          if (data.likes.lognameLikesThis) {
+            setLikes(data.likes);
+          } else {
+            setLikes({
+              lognameLikesThis: data.likes.lognameLikesThis,
+              numLikes: data.likes.numLikes,
+              url: `/api/v1/likes/?postid=${postid}`,
+            });
+          }
         }
       })
       .catch((error) => console.log(error));
@@ -72,6 +84,43 @@ export default function Post({ url, postid }) {
     </div>
   ));
 
+  // Handle like/unlike action
+  const handleLike = () => {
+    // Determine the method based on currrnt like status
+    const methods = likes.lognameLikesThis ? "DELETE" : "POST";
+    const actionUrl = likes.url;
+
+    fetch(actionUrl, {
+      method: methods,
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok.');
+      return (methods === "POST" ? response.json() : Promise.resolve()); 
+      // THIS LINE IS VERY IMPORTANT!!! detele request does not return a json object
+    })
+    .then(data => {
+      if (methods === "POST") {
+        // Handle state update for a successful "Like" action
+        setLikes({
+          lognameLikesThis: true,
+          numLikes: likes.numLikes + 1,
+          url: data.url, // Assuming this is how your server responds with the "Unlike" URL
+        });
+      } else {
+        // Handle state update for a successful "Unlike" action
+        setLikes(prevLikes => ({
+          lognameLikesThis: false,
+          numLikes: prevLikes.numLikes > 0 ? prevLikes.numLikes - 1 : 0, // Safeguard to prevent negative likes
+          url: `/api/v1/likes/?postid=${postid}`, // Reset or prepare the URL for a new "Like" action
+        }));
+      }
+    })
+    .catch(error => console.error('Error:', error));
+
+  };
+
   // Render post image and post owner
   return (
     <div className="post">
@@ -89,7 +138,8 @@ export default function Post({ url, postid }) {
       <img src={imgUrl} alt="post_image" />
       <div>
         <div className="comments">{CommentList}</div>
-        <div className="comment_like">
+        <div>
+          <Likes likes={likes} handleLike={handleLike} />
           <PostComment url={commentsUrl} setComments={setComments} />
         </div>
       </div>

@@ -135,22 +135,20 @@ header nav a {
     margin-right: 0;
 }
 
-.comment_like input[type="submit"] {
+.comment_like {
     background-color: #000;
     color: #fff;
     border: none;
     padding: 6px 16px;
     cursor: pointer;
     font-weight: bold;
-}
-
-.comment_like input[type="text"] {
     margin-right: 0;
     margin-left: 15%;
     padding: 5px 10%;
     border: 1px solid #ccc;
 }
-.comment_like input[type = "submit"]:hover{
+
+.comment_like:hover{
     background-color: rgb(59, 114, 96);
 }
 
