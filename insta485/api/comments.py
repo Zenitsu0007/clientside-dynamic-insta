@@ -7,9 +7,9 @@ import insta485
 def create_comment():
     """Create a new comment."""
     # HTTP authorization for user
-    auth_response = insta485.api.index.check_authentication()
-    if auth_response is not None:
-        return auth_response
+    auth_response1 = insta485.api.index.check_authentication()
+    if auth_response1 is not None:
+        return auth_response1
 
     # Extract username from session or basic auth
     if 'username' in flask.session:
@@ -65,15 +65,13 @@ def create_comment():
 def delete_comment(commentid):
     """Delete the comment based on the comment id."""
     # HTTP authorization for user
-    auth_response = insta485.api.index.check_authentication()
-    if auth_response is not None:
-        return auth_response
-
-    # Extract username from session or basic auth
-    if 'username' in flask.session:
-        username = flask.session['username']
-    else:
+    authresponse = insta485.api.index.check_authentication()
+    if authresponse is not None:
+        return authresponse
+    if 'username' not in flask.session:
         username = flask.request.authorization['username']
+    else:
+        username = flask.session['username']
 
     connection = insta485.model.get_db()
     # Check if the comment exists and if the user owns the comment

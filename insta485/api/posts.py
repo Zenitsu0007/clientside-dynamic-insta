@@ -109,7 +109,7 @@ def get_post_detail(postid_url_slug):
         'commentid': comment['commentid'],
         'owner': comment['owner'],
         'text': comment['text'],
-        'lognameOwnsThis': True if comment['owner'] == username else False,
+        'lognameOwnsThis': comment['owner'] == username,
         'url': f"/api/v1/comments/{comment['commentid']}/",
         'ownerShowUrl': f"/users/{comment['owner']}/"
         }

@@ -36,20 +36,20 @@ def login(connection, target_url):
 
     # Fetch the stored password hash
     # (including the salt and algorithm) from the database
-    query = 'SELECT password FROM users WHERE username = ?'
-    cur = connection.execute(query, (username,))
-    result = cur.fetchone()
+    query1 = 'SELECT password FROM users WHERE username = ?'
+    cur = connection.execute(query1, (username,))
+    result1 = cur.fetchone()
 
     # If the user exists
-    if result:
-        stored_password = result['password']
+    if result1:
+        stored_password = result1['password']
         algorithm, salt, stored_hash = stored_password.split('$')
         # Hash the provided password
         # using the extracted salt (and algorithm)
-        hash_obj = hashlib.new(algorithm)
+        hash_obj1 = hashlib.new(algorithm)
         password_salted = salt + password
-        hash_obj.update(password_salted.encode('utf-8'))
-        computed_hash = hash_obj.hexdigest()
+        hash_obj1.update(password_salted.encode('utf-8'))
+        computed_hash = hash_obj1.hexdigest()
 
         # Compare the computed hash with the stored hash
         if computed_hash == stored_hash:
