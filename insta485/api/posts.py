@@ -22,12 +22,12 @@ def get_some_posts():
 
     # Get most recent post id
     cur = connection.execute('SELECT MAX(postid) AS max_post_id FROM posts')
-    most_recent_post_id = cur.fetchone()['max_post_id']
 
-    postid_lte = flask.request.args.get('postid_lte', default=most_recent_post_id, type=int)
+    postid_lte = flask.request.args.get('postid_lte', default=None, type=int)
     size = flask.request.args.get('size', default=10, type=int)
     page = flask.request.args.get('page', default=0, type=int)
-
+    if postid_lte is None:
+        postid_lte = cur.fetchone()['max_post_id']
     # Check if page and size are valid
     if size <= 0 or page < 0:
         error_response = {"message": "Bad Request","status_code": 400}
@@ -46,9 +46,9 @@ def get_some_posts():
     posts = cur.fetchall()
     post_ids = [item['postid'] for item in posts]
 
-    # # latest post id
-    # if not flask.request.args.get("postid_lte") and post_ids:
-    #     postid_lte = max(post_ids)
+    # latest post id
+    if (not flask.request.args.get("postid_lte")) and post_ids:
+        postid_lte = max(post_ids)
 
     # Construct results
     results = [{"postid": post_id, "url": f"/api/v1/posts/{post_id}/"} for post_id in post_ids]
@@ -62,6 +62,7 @@ def get_some_posts():
         next_field = ""
     else:
         next_field = flask.url_for("get_some_posts", size=size, page=page+1, postid_lte=postid_lte)
+
     context = {
         "next": next_field,
         "results": results,
@@ -130,7 +131,7 @@ def get_post_detail(postid_url_slug):
 
     owner_image_url = connection.execute(
         'SELECT filename FROM users WHERE username = ?', 
-        (username,)
+        (post['owner'],)
     ).fetchone()
 
     # Construct the response

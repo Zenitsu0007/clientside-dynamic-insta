@@ -138,7 +138,7 @@ export default function Post({ url, postid }) {
 
   // Render post image and post owner
   return (
-    <article className="post">
+    <div className="post">
       <header className="post-header">
         <div className="post-user">
           <a className="profile-pic" href={ownerShowUrl}>
@@ -158,7 +158,7 @@ export default function Post({ url, postid }) {
           <PostComment url={commentsUrl} setComments={setComments} />
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 
