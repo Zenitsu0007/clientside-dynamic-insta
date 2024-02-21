@@ -7,7 +7,6 @@ import PostComment from "./post_comment";
 import DeleteComment from "./delete_comment";
 import Likes from "./likes";
 
-
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
@@ -26,7 +25,6 @@ export default function Post({ url, postid }) {
   const [postShowUrl, setPostShowUrl] = useState("");
   const [likes, setLikes] = useState({});
   const [showHeart, setShowHeart] = useState(false);
-
 
   useEffect(() => {
     // Declare a boolean flag that we can use to cancel the API request.
@@ -49,7 +47,7 @@ export default function Post({ url, postid }) {
           setOwner(data.owner);
           setOwnerImgUrl(data.ownerImgUrl);
           setOwnerShowUrl(data.ownerShowUrl);
-          setPostShowUrl(data.postShowUrl); 
+          setPostShowUrl(data.postShowUrl);
           if (data.likes.lognameLikesThis) {
             setLikes(data.likes);
           } else {
@@ -74,9 +72,7 @@ export default function Post({ url, postid }) {
   const CommentList = comments.map((comment) => (
     <div key={comment.commentid} className="comments">
       <a href={comment.ownerShowUrl}>{comment.owner}</a>
-      <span data-testid="comment-text">
-        {comment.text}
-      </span>
+      <span data-testid="comment-text">{comment.text}</span>
       {comment.lognameOwnsThis && (
         <DeleteComment
           commentId={comment.commentid}
@@ -97,30 +93,29 @@ export default function Post({ url, postid }) {
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
     })
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok.');
-      return (methods === "POST" ? response.json() : Promise.resolve()); 
-      // THIS LINE IS VERY IMPORTANT!!! detele request does not return a json object
-    })
-    .then(data => {
-      if (methods === "POST") {
-        // Handle state update for a successful "Like" action
-        setLikes({
-          lognameLikesThis: true,
-          numLikes: likes.numLikes + 1,
-          url: data.url, // Assuming this is how your server responds with the "Unlike" URL
-        });
-      } else {
-        // Handle state update for a successful "Unlike" action
-        setLikes(prevLikes => ({
-          lognameLikesThis: false,
-          numLikes: prevLikes.numLikes > 0 ? prevLikes.numLikes - 1 : 0, // Safeguard to prevent negative likes
-          url: `/api/v1/likes/?postid=${postid}`, // Reset or prepare the URL for a new "Like" action
-        }));
-      }
-    })
-    .catch(error => console.error('Error:', error));
-
+      .then((response) => {
+        if (!response.ok) throw new Error("Network response was not ok.");
+        return methods === "POST" ? response.json() : Promise.resolve();
+        // THIS LINE IS VERY IMPORTANT!!! detele request does not return a json object
+      })
+      .then((data) => {
+        if (methods === "POST") {
+          // Handle state update for a successful "Like" action
+          setLikes({
+            lognameLikesThis: true,
+            numLikes: likes.numLikes + 1,
+            url: data.url, // Assuming this is how your server responds with the "Unlike" URL
+          });
+        } else {
+          // Handle state update for a successful "Unlike" action
+          setLikes((prevLikes) => ({
+            lognameLikesThis: false,
+            numLikes: prevLikes.numLikes > 0 ? prevLikes.numLikes - 1 : 0, // Safeguard to prevent negative likes
+            url: `/api/v1/likes/?postid=${postid}`, // Reset or prepare the URL for a new "Like" action
+          }));
+        }
+      })
+      .catch((error) => console.error("Error:", error));
   };
 
   const handleImageDoubleClick = () => {
@@ -128,7 +123,7 @@ export default function Post({ url, postid }) {
     if (likes.lognameLikesThis) {
       return;
     }
-  
+
     // Otherwise, perform the like action
     handleLike();
     setShowHeart(true); // Show the heart
@@ -150,14 +145,22 @@ export default function Post({ url, postid }) {
           <a href={postShowUrl}>{dayjs.utc(created).local().fromNow()}</a>
         </div>
       </header>
-      <img src={imgUrl} alt="post_image" onDoubleClick={handleImageDoubleClick} />
-      {showHeart && <i className="fa fa-heart like-heart"/>}
+      <img
+        src={imgUrl}
+        alt="post_image"
+        onDoubleClick={handleImageDoubleClick}
+      />
+      {showHeart && <i className="fa fa-heart like-heart" />}
       <div>
-        <div className="likes">{`${likes.numLikes} ${likes.numLikes === 1 ? 'like' : 'likes'}`} </div>
+        <div className="likes">
+          {`${likes.numLikes} ${likes.numLikes === 1 ? "like" : "likes"}`}{" "}
+        </div>
         <div>{CommentList}</div>
         <div className="comment_like">
-          <Likes likes={likes} handleLike={handleLike} />
-          <PostComment url={commentsUrl} setComments={setComments} />
+          {likes.url && <Likes likes={likes} handleLike={handleLike} />}
+          {commentsUrl && (
+            <PostComment url={commentsUrl} setComments={setComments} />
+          )}
         </div>
       </div>
     </div>
