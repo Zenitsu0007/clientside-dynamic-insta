@@ -25,6 +25,8 @@ export default function Post({ url, postid }) {
   const [ownerShowUrl, setOwnerShowUrl] = useState("");
   const [postShowUrl, setPostShowUrl] = useState("");
   const [likes, setLikes] = useState({});
+  const [showHeart, setShowHeart] = useState(false);
+
 
   useEffect(() => {
     // Declare a boolean flag that we can use to cancel the API request.
@@ -121,6 +123,19 @@ export default function Post({ url, postid }) {
 
   };
 
+  const handleImageDoubleClick = () => {
+    // If the image is already liked, do nothing
+    if (likes.lognameLikesThis) {
+      return;
+    }
+  
+    // Otherwise, perform the like action
+    handleLike();
+    setShowHeart(true); // Show the heart
+    // Optional: Hide the heart icon after some time
+    setTimeout(() => setShowHeart(false), 1000); // Adjust time as needed
+  };
+
   // Render post image and post owner
   return (
     <div className="post">
@@ -135,7 +150,8 @@ export default function Post({ url, postid }) {
           <a href={postShowUrl}>{dayjs.utc(created).local().fromNow()}</a>
         </div>
       </header>
-      <img src={imgUrl} alt="post_image" />
+      <img src={imgUrl} alt="post_image" onDoubleClick={handleImageDoubleClick} />
+      {showHeart && <i className="fa fa-heart like-heart"/>}
       <div>
         <div className="comments">{CommentList}</div>
         <div>
