@@ -5,7 +5,7 @@ import insta485
 
 @insta485.app.route("/api/v1/comments/", methods=["POST"])
 def create_comment():
-    """Create a new comment based on the text in the JSON body for the specified post id."""
+    """Create a new comment."""
     # HTTP authorization for user
     auth_response = insta485.api.index.check_authentication()
     if auth_response is not None:
@@ -23,7 +23,10 @@ def create_comment():
 
     # Validate postid and text
     if not postid or not text:
-        error_response = {"message": "Missing postid or text", "status_code": 400}
+        error_response = {
+            "message": "Missing postid or text",
+            "status_code": 400
+        }
         return flask.jsonify(**error_response), 400
 
     # Connect to DB and check if post exists
@@ -75,7 +78,7 @@ def delete_comment(commentid):
     connection = insta485.model.get_db()
     # Check if the comment exists and if the user owns the comment
     comment = connection.execute(
-        "SELECT * FROM comments WHERE commentid = ?", 
+        "SELECT * FROM comments WHERE commentid = ?",
         (commentid,)
     ).fetchone()
 
@@ -91,7 +94,7 @@ def delete_comment(commentid):
 
     # Delete the comment from the database
     connection.execute(
-        "DELETE FROM comments WHERE commentid = ?", 
+        "DELETE FROM comments WHERE commentid = ?",
         (commentid,)
     )
     connection.commit()

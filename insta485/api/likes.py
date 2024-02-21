@@ -18,13 +18,16 @@ def create_like():
 
     postid = flask.request.args.get('postid', type=int)
     if postid is None:
-        return flask.jsonify({'message': 'Bad Request', 'status_code': '400'}), 400
+        error_response = {'message': 'Bad Request', 'status_code': '400'}
+        return flask.jsonify(**error_response), 400
 
     db = insta485.model.get_db()
 
     # Check if the post exists
-    if not db.execute('SELECT 1 FROM posts WHERE postid = ?', (postid,)).fetchone():
-        return flask.jsonify({"message": "Post not found", "status_code": 404}), 404
+    if not db.execute('SELECT 1 FROM posts WHERE postid = ?',
+                      (postid,)).fetchone():
+        error_response = {"message": "Post not found", "status_code": 404}
+        return flask.jsonify(**error_response), 404
 
     # Check if the user has already liked the post
     query = 'SELECT likeid FROM likes WHERE owner = ? AND postid = ?'
@@ -69,7 +72,8 @@ def delete_like(likeid):
     query = 'SELECT owner, postid FROM likes WHERE likeid = ?'
     like = db.execute(query, (likeid,)).fetchone()
     if not like:
-        return flask.jsonify({"message": "Like not found", "status_code": 404}), 404
+        error_response = {"message": "Like not found", "status_code": 404}
+        return flask.jsonify(**error_response), 404
 
     # Check if the user owns the like
     if like['owner'] != username:

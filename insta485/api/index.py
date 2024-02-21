@@ -52,10 +52,10 @@ def check_authentication():
                 return flask.jsonify(**error_response), 403
         else:
             # User not found
-            error_response = {'message': 'Forbidden','status_code': 403}
+            error_response = {'message': 'Forbidden', 'status_code': 403}
             return flask.jsonify(**error_response), 403
     else:
         # Access without authentication
-        error_response = {'message': 'Forbidden','status_code': 403}
+        error_response = {'message': 'Forbidden', 'status_code': 403}
         return flask.jsonify(**error_response), 403
     return None

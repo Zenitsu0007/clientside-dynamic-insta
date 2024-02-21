@@ -3,7 +3,7 @@ import flask
 import insta485
 
 
-@insta485.app.route("/api/v1/posts/", methods = ["GET"])
+@insta485.app.route("/api/v1/posts/", methods=["GET"])
 def get_some_posts():
     """Show a list of posts."""
     # HTTP authorization for user
@@ -30,7 +30,7 @@ def get_some_posts():
         postid_lte = cur.fetchone()['max_post_id']
     # Check if page and size are valid
     if size <= 0 or page < 0:
-        error_response = {"message": "Bad Request","status_code": 400}
+        error_response = {"message": "Bad Request", "status_code": 400}
         return flask.jsonify(**error_response), 400
 
     # query for posts
@@ -42,7 +42,8 @@ def get_some_posts():
     ORDER BY p.postid DESC
     LIMIT ? OFFSET ?
     '''
-    cur = connection.execute(query, (postid_lte, username, username, size, size*page))
+    cur = connection.execute(query,
+                             (postid_lte, username, username, size, size*page))
     posts = cur.fetchall()
     post_ids = [item['postid'] for item in posts]
 
@@ -51,17 +52,19 @@ def get_some_posts():
         postid_lte = max(post_ids)
 
     # Construct results
-    results = [{"postid": post_id, "url": f"/api/v1/posts/{post_id}/"} for post_id in post_ids]
+    results = [{"postid": post_id, "url": f"/api/v1/posts/{post_id}/"}
+               for post_id in post_ids]
     # Current url
     url_now = flask.url_for("get_some_posts",
-                        size=flask.request.args.get("size"),
-                        page=flask.request.args.get("page"),
-                        postid_lte=flask.request.args.get("postid_lte"))
+                            size=flask.request.args.get("size"),
+                            page=flask.request.args.get("page"),
+                            postid_lte=flask.request.args.get("postid_lte"))
     # Next field url
     if len(post_ids) < size:
         next_field = ""
     else:
-        next_field = flask.url_for("get_some_posts", size=size, page=page+1, postid_lte=postid_lte)
+        next_field = flask.url_for("get_some_posts", size=size,
+                                   page=page+1, postid_lte=postid_lte)
 
     context = {
         "next": next_field,
@@ -89,7 +92,7 @@ def get_post_detail(postid_url_slug):
 
     # Check if the post exists
     post = connection.execute(
-        'SELECT * FROM posts WHERE postid = ?', 
+        'SELECT * FROM posts WHERE postid = ?',
         (postid_url_slug,)
     ).fetchone()
     if not post:
@@ -99,28 +102,27 @@ def get_post_detail(postid_url_slug):
     # Fetch comments for the post
     comments = connection.execute(
         'SELECT commentid, owner, text '
-        'FROM comments WHERE postid = ?', 
+        'FROM comments WHERE postid = ?',
         (postid_url_slug,)
     ).fetchall()
-    comments_list = [
-    {
+    comments_list = [{
         'commentid': comment['commentid'],
         'owner': comment['owner'],
         'text': comment['text'],
         'lognameOwnsThis': True if comment['owner'] == username else False,
         'url': f"/api/v1/comments/{comment['commentid']}/",
         'ownerShowUrl': f"/users/{comment['owner']}/"
-    }
-    for comment in comments
+        }
+        for comment in comments
     ]
 
     # Fetch like details
     like = connection.execute(
-        'SELECT likeid FROM likes WHERE owner = ? AND postid = ?', 
+        'SELECT likeid FROM likes WHERE owner = ? AND postid = ?',
         (username, postid_url_slug)
     ).fetchone()
     num_likes = connection.execute(
-        'SELECT COUNT(*) as count FROM likes WHERE postid = ?', 
+        'SELECT COUNT(*) as count FROM likes WHERE postid = ?',
         (postid_url_slug,)
     ).fetchone()['count']
     likes = {
@@ -130,7 +132,7 @@ def get_post_detail(postid_url_slug):
     }
 
     owner_image_url = connection.execute(
-        'SELECT filename FROM users WHERE username = ?', 
+        'SELECT filename FROM users WHERE username = ?',
         (post['owner'],)
     ).fetchone()
 
