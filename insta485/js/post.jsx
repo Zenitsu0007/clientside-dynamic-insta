@@ -63,8 +63,10 @@ export default function Post({ url, postid }) {
         setIsLoading(false);
       }
       )
-      .catch((error) => console.log(error));
-      setIsLoading(false);
+      .catch((error) => {
+        console.log(error);
+      });
+
 
     return () => {
       // This is a cleanup function that runs whenever the Post component
@@ -82,6 +84,7 @@ export default function Post({ url, postid }) {
         <DeleteComment
           commentId={comment.commentid}
           setComments={setComments}
+          load={isLoading}
         />
       )}
     </div>
@@ -166,10 +169,8 @@ export default function Post({ url, postid }) {
         </div>
         <div>{CommentList}</div>
         <div className="comment_like">
-          {likes.url && <Likes likes={likes} handleLike={handleLike} />}
-          {commentsUrl && (
-            <PostComment url={commentsUrl} setComments={setComments} />
-          )}
+          <Likes likes={likes} handleLike={handleLike} load={isLoading} />
+          <PostComment url={commentsUrl} setComments={setComments} load={isLoading} />
         </div>
       </div>
     </div>

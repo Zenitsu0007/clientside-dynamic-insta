@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
-export default function DeleteComment({ commentId, setComments }) {
-  const [isLoading, setIsLoading] = useState(true);
+export default function DeleteComment({ commentId, setComments, load }) {
   function handleDelete(e) {
-    setIsLoading(true);
     e.preventDefault();
     const deleteUrl = `/api/v1/comments/${commentId}/`;
     // Call REST API to delete comment
@@ -18,16 +16,14 @@ export default function DeleteComment({ commentId, setComments }) {
         setComments((prevComments) =>
           {
             prevComments.filter((comment) => comment.commentid !== commentId);
-            setIsLoading(false);
           }
         );
       })
       .catch((error) => console.error(error));
-      setIsLoading(false);
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Show loading state
+  if (!load) {
+    return null; // Show loading state
   }
 
   return (
@@ -44,4 +40,5 @@ export default function DeleteComment({ commentId, setComments }) {
 DeleteComment.propTypes = {
   commentId: PropTypes.number.isRequired,
   setComments: PropTypes.func.isRequired,
+  load: PropTypes.bool.isRequired,
 };
