@@ -43,7 +43,7 @@ export default function Index({ url }) {
       >
         {posts.map((result) => (
           <div key={result.postid}>
-            <Post url={result.url} postid={result.postid} />
+            {result.url && result.postid && <Post url={result.url} postid={result.postid} />}
           </div>
         ))}
       </InfiniteScroll>

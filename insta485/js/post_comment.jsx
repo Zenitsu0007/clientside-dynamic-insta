@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function PostComment({ url, setComments, load }) {
+export default function PostComment({ url, setComments }) {
   const [text, setText] = useState("");
   function handleText(e) {
     setText(e.target.value);
@@ -29,9 +29,6 @@ export default function PostComment({ url, setComments, load }) {
     }
   }
   
-  if (!load) {
-    return null; // Show loading state
-  }
 
   return (
     <form data-testid="comment-form" onSubmit={handleComment}>
@@ -48,5 +45,4 @@ export default function PostComment({ url, setComments, load }) {
 PostComment.propTypes = {
   url: PropTypes.string.isRequired,
   setComments: PropTypes.func.isRequired,
-  load: PropTypes.bool.isRequired,
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function DeleteComment({ commentId, setComments, load }) {
+export default function DeleteComment({ commentId, setComments }) {
   function handleDelete(e) {
     e.preventDefault();
     const deleteUrl = `/api/v1/comments/${commentId}/`;
@@ -22,10 +22,6 @@ export default function DeleteComment({ commentId, setComments, load }) {
       .catch((error) => console.error(error));
   }
 
-  if (!load) {
-    return null; // Show loading state
-  }
-
   return (
     <button
       data-testid="delete-comment-button"
@@ -40,5 +36,4 @@ export default function DeleteComment({ commentId, setComments, load }) {
 DeleteComment.propTypes = {
   commentId: PropTypes.number.isRequired,
   setComments: PropTypes.func.isRequired,
-  load: PropTypes.bool.isRequired,
 };
