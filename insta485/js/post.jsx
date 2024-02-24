@@ -149,24 +149,24 @@ export default function Post({ url, postid }) {
       <header className="post-header">
         <div className="post-user">
           <a className="profile-pic" href={ownerShowUrl}>
-            <img src={ownerImgUrl} alt="profile_picture" />
+            {ownerImgUrl && < img src={ownerImgUrl} alt="profile_picture" />}
           </a>
-          <a href={ownerShowUrl}>{owner}</a>
+            {ownerShowUrl && <a href={ownerShowUrl}>{owner}</a>}
         </div>
         <div className="time">
-          <a href={postShowUrl}>{dayjs.utc(created).local().fromNow()}</a>
+          {postShowUrl && <a href={postShowUrl}>{dayjs.utc(created).local().fromNow()}</a>}
         </div>
       </header>
-      <img
+      { imgUrl && <img
         src={imgUrl}
         alt="post_image"
         onDoubleClick={handleImageDoubleClick}
-      />
+      />}
       {showHeart && <i className="fa fa-heart like-heart" />}
       <div>
-        <div className="likes">
+        {likes.numLikes && <div className="likes">
           {`${likes.numLikes} ${likes.numLikes === 1 ? "like" : "likes"}`}{" "}
-        </div>
+        </div>}
         <div>{CommentList}</div>
         <div className="comment_like">
           <Likes likes={likes} handleLike={handleLike} load={isLoading} />
