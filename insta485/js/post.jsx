@@ -25,8 +25,10 @@ export default function Post({ url, postid }) {
   const [postShowUrl, setPostShowUrl] = useState("");
   const [likes, setLikes] = useState({});
   const [showHeart, setShowHeart] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     // Declare a boolean flag that we can use to cancel the API request.
     let ignoreStaleRequest = false;
 
@@ -58,8 +60,11 @@ export default function Post({ url, postid }) {
             });
           }
         }
-      })
+        setIsLoading(false);
+      }
+      )
       .catch((error) => console.log(error));
+      setIsLoading(false);
 
     return () => {
       // This is a cleanup function that runs whenever the Post component
@@ -130,6 +135,10 @@ export default function Post({ url, postid }) {
     // Optional: Hide the heart icon after some time
     setTimeout(() => setShowHeart(false), 1000); // Adjust time as needed
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Show loading state
+  }
 
   // Render post image and post owner
   return (

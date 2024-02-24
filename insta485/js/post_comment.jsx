@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export default function PostComment({ url, setComments }) {
   const [text, setText] = useState("");
-
+  const [isLoading, setIsLoading] = useState(true);
   function handleText(e) {
     setText(e.target.value);
   }
@@ -12,6 +12,7 @@ export default function PostComment({ url, setComments }) {
     e.preventDefault();
     if (text.trim() !== "") {
       // Call REST API to post comment
+      setIsLoading(true);
       fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,9 +26,15 @@ export default function PostComment({ url, setComments }) {
         .then((newComment) => {
           setComments((prevComments) => [...prevComments, newComment]);
           setText(""); // Clear input after posting
+          setIsLoading(false);
         })
         .catch((error) => console.error(error));
+        setIsLoading(false);
     }
+  }
+  
+  if (isLoading) {
+    return <div>Loading...</div>; // Show loading state
   }
 
   return (
