@@ -25,10 +25,10 @@ export default function Post({ url, postid }) {
   const [postShowUrl, setPostShowUrl] = useState("");
   const [likes, setLikes] = useState({});
   const [showHeart, setShowHeart] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(false);
     // Declare a boolean flag that we can use to cancel the API request.
     let ignoreStaleRequest = false;
 
@@ -60,7 +60,7 @@ export default function Post({ url, postid }) {
             });
           }
         }
-        setIsLoading(false);
+        setIsLoading(true);
       }
       )
       .catch((error) => {
@@ -139,7 +139,7 @@ export default function Post({ url, postid }) {
     setTimeout(() => setShowHeart(false), 1000); // Adjust time as needed
   };
 
-  if (isLoading) {
+  if (!isLoading) {
     return <div>Loading...</div>; // Show loading state
   }
 
