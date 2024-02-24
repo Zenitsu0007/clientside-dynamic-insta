@@ -61,12 +61,10 @@ export default function Post({ url, postid }) {
           }
         }
         setIsLoading(true);
-      }
-      )
+      })
       .catch((error) => {
         console.log(error);
       });
-
 
     return () => {
       // This is a cleanup function that runs whenever the Post component
@@ -149,28 +147,38 @@ export default function Post({ url, postid }) {
       <header className="post-header">
         <div className="post-user">
           <a className="profile-pic" href={ownerShowUrl}>
-            {ownerImgUrl && < img src={ownerImgUrl} alt="profile_picture" />}
+            {ownerImgUrl && <img src={ownerImgUrl} alt="profile_picture" />}
           </a>
-            {ownerShowUrl && <a href={ownerShowUrl}>{owner}</a>}
+          {ownerShowUrl && <a href={ownerShowUrl}>{owner}</a>}
         </div>
         <div className="time">
-          {postShowUrl && <a href={postShowUrl}>{dayjs.utc(created).local().fromNow()}</a>}
+          {postShowUrl && (
+            <a href={postShowUrl}>{dayjs.utc(created).local().fromNow()}</a>
+          )}
         </div>
       </header>
-      { imgUrl && <img
-        src={imgUrl}
-        alt="post_image"
-        onDoubleClick={handleImageDoubleClick}
-      />}
+      {imgUrl && (
+        <img
+          src={imgUrl}
+          alt="post_image"
+          onDoubleClick={handleImageDoubleClick}
+        />
+      )}
       {showHeart && <i className="fa fa-heart like-heart" />}
       <div>
-        {likes.numLikes && <div className="likes">
-          {`${likes.numLikes} ${likes.numLikes === 1 ? "like" : "likes"}`}{" "}
-        </div>}
+        {likes.numLikes && (
+          <div className="likes">
+            {`${likes.numLikes} ${likes.numLikes === 1 ? "like" : "likes"}`}{" "}
+          </div>
+        )}
         <div>{CommentList}</div>
         <div className="comment_like">
           <Likes likes={likes} handleLike={handleLike} load={isLoading} />
-          <PostComment url={commentsUrl} setComments={setComments} load={isLoading} />
+          <PostComment
+            url={commentsUrl}
+            setComments={setComments}
+            load={isLoading}
+          />
         </div>
       </div>
     </div>
