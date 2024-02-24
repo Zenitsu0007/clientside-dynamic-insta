@@ -25,6 +25,7 @@ export default function Post({ url, postid }) {
   const [postShowUrl, setPostShowUrl] = useState("");
   const [likes, setLikes] = useState({});
   const [showHeart, setShowHeart] = useState(false);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     // Declare a boolean flag that we can use to cancel the API request.
@@ -48,6 +49,7 @@ export default function Post({ url, postid }) {
           setOwnerImgUrl(data.ownerImgUrl);
           setOwnerShowUrl(data.ownerShowUrl);
           setPostShowUrl(data.postShowUrl);
+          setLoad(true);
           if (data.likes.lognameLikesThis) {
             setLikes(data.likes);
           } else {
@@ -157,9 +159,9 @@ export default function Post({ url, postid }) {
         </div>
         <div>{CommentList}</div>
         <div className="comment_like">
-          {likes.url && <Likes likes={likes} handleLike={handleLike} />}
+          {likes.url && <Likes likes={likes} handleLike={handleLike} load={load}/>}
           {commentsUrl && (
-            <PostComment url={commentsUrl} setComments={setComments} />
+            <PostComment url={commentsUrl} setComments={setComments} load={load}/>
           )}
         </div>
       </div>
