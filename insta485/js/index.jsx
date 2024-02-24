@@ -20,9 +20,7 @@ export default function Index({ url }) {
         setNext(data.next);
         setPosts([...posts, ...data.results]);
       })
-      .catch((error) => {
-        console.log(error)
-      });
+      .catch((error) => console.log(error));
   };
 
   if (posts.length === 0) fetchNext();

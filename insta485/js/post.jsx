@@ -25,10 +25,8 @@ export default function Post({ url, postid }) {
   const [postShowUrl, setPostShowUrl] = useState("");
   const [likes, setLikes] = useState({});
   const [showHeart, setShowHeart] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(false);
     // Declare a boolean flag that we can use to cancel the API request.
     let ignoreStaleRequest = false;
 
@@ -60,11 +58,8 @@ export default function Post({ url, postid }) {
             });
           }
         }
-        setIsLoading(true);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
 
     return () => {
       // This is a cleanup function that runs whenever the Post component
@@ -82,7 +77,6 @@ export default function Post({ url, postid }) {
         <DeleteComment
           commentId={comment.commentid}
           setComments={setComments}
-          load={isLoading}
         />
       )}
     </div>
@@ -137,10 +131,6 @@ export default function Post({ url, postid }) {
     setTimeout(() => setShowHeart(false), 1000); // Adjust time as needed
   };
 
-  if (!isLoading) {
-    return <div>Loading...</div>; // Show loading state
-  }
-
   // Render post image and post owner
   return (
     <div className="post">
@@ -166,19 +156,15 @@ export default function Post({ url, postid }) {
       )}
       {showHeart && <i className="fa fa-heart like-heart" />}
       <div>
-        {likes.numLikes && (
-          <div className="likes">
-            {`${likes.numLikes} ${likes.numLikes === 1 ? "like" : "likes"}`}{" "}
-          </div>
-        )}
+        <div className="likes">
+          {`${likes.numLikes} ${likes.numLikes === 1 ? "like" : "likes"}`}{" "}
+        </div>
         <div>{CommentList}</div>
         <div className="comment_like">
-          <Likes likes={likes} handleLike={handleLike} load={isLoading} />
-          <PostComment
-            url={commentsUrl}
-            setComments={setComments}
-            load={isLoading}
-          />
+          {likes.url && <Likes likes={likes} handleLike={handleLike} />}
+          {commentsUrl && (
+            <PostComment url={commentsUrl} setComments={setComments} />
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function DeleteComment({ commentId, setComments, load }) {
+export default function DeleteComment({ commentId, setComments }) {
   function handleDelete(e) {
     e.preventDefault();
     const deleteUrl = `/api/v1/comments/${commentId}/`;
@@ -14,16 +14,10 @@ export default function DeleteComment({ commentId, setComments, load }) {
         if (!response.ok) throw new Error("Failed to delete comment");
         // Update comments state to remove the deleted comment
         setComments((prevComments) =>
-          {
-            prevComments.filter((comment) => comment.commentid !== commentId);
-          }
+          prevComments.filter((comment) => comment.commentid !== commentId),
         );
       })
       .catch((error) => console.error(error));
-  }
-
-  if (!load) {
-    return null; // Show loading state
   }
 
   return (
@@ -40,5 +34,4 @@ export default function DeleteComment({ commentId, setComments, load }) {
 DeleteComment.propTypes = {
   commentId: PropTypes.number.isRequired,
   setComments: PropTypes.func.isRequired,
-  load: PropTypes.bool.isRequired,
 };
